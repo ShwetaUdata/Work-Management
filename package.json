@@ -1,11 +1,34 @@
 {
-  "name": "work-management",
+   "name": "work-management",
+  "version": "1.0.0",
+  "main": "main.js",
   "private": true,
-  "scripts": {
-    "install-all": "npm install --prefix frontend && npm install --prefix backend",
-    "dev": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\""
-  },
+"scripts": {
+  "dev-backend": "nodemon backend/server.js",
+  "dev-frontend": "cd frontend && npx next dev -p 5173",
+  "dev-electron": "wait-on http://localhost:5173 && npx electron .",
+  "dev": "concurrently \"npm run dev-backend\" \"npm run dev-frontend\" \"npm run dev-electron\"",
+  "build-frontend": "cd frontend && npx next build",
+  "build": "npm run build-frontend && npx electron-builder",
+  "start": "electron ."
+},
   "devDependencies": {
-    "concurrently": "^9.0.0"
-  }
+    "concurrently": "^9.2.1",
+    "electron": "^38.3.0",
+    "electron-builder": "^26.0.12",
+    "nodemon": "^3.1.10",
+    "wait-on": "^9.0.1"
+  },
+  "build": {
+  "appId": "com.shweta.workmanagement",
+  "productName": "Work Management",
+  "directories": { "output": "dist" },
+  "files": [
+    "main.js",
+    "backend/**/*",
+    "frontend/out/**/*",
+    "package.json"
+  ],
+  "win": { "target": "nsis" }
+}
 }
